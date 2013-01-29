@@ -1,4 +1,4 @@
-require './compiler.rb'
+require_relative './compiler.rb'
 
 class CppCompiler < Compiler
   class << Compiler
