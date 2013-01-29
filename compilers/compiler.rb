@@ -24,7 +24,7 @@ class Compiler
     end
 
     def create_command(source, destination, additional_files)
-      destination
+      "./#{destination}"
     end
 
     def prepare_compile_command(source, destination, additional_files)
