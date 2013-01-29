@@ -1,24 +1,46 @@
 require 'open3'
+require_relative '../executors/runnable.rb'
 
 class Compiler
-  attr_reader :stdout, :stderr, :status, :compiled_file
-
   class << self
-    def compile(source, destination)
-      compile_command = COMMAND_OPTIONS.map do |option|
+    def compile(source, destination, additional_files = [])
+      before_compilation source, destination, additional_files
+
+      compile_command = prepare_compile_command source, destination, additional_files
+      status = Status.new *Open3.capture3(*compile_command)
+
+      after_compilation source, destination, additional_files
+
+      command = create_command source, destination, additional_files
+      return status, Runnable.new(command, [destination] + additional_files)
+    end
+
+    private
+
+    def before_compilation(source, destination, additional_files)
+    end
+
+    def after_compilation(source, destination, additional_files)
+    end
+
+    def create_command(source, destination, additional_files)
+      destination
+    end
+
+    def prepare_compile_command(source, destination, additional_files)
+      COMMAND_OPTIONS.map do |option|
         option.gsub /%SOURCE%|%DESTINATION%/,
           '%SOURCE%' => source, '%DESTINATION%' => destination
       end
-
-      new *Open3.capture3(*compile_command), File.new(destination)
     end
   end
 
-  private
+  class Status
+    attr_reader :output, :error, :success
 
-  def initialize(stdout, stderr, status, compiled_file)
-    @stdout, @stderr = stdout, stderr
-    @status = status.success?
-    @compiled_file = @status ? compiled_file : nil
+    def initialize(output, error, status)
+      @output, @error = output, error
+      @success = status.success?
+    end
   end
 end
