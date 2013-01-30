@@ -1,0 +1,3 @@
+module Limits
+  DEFAULT = {}
+end
