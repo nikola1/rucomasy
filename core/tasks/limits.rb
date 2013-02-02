@@ -1,3 +1,0 @@
-module Limits
-  DEFAULT = {}
-end
