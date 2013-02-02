@@ -3,11 +3,6 @@ module Task
     STANDART = :standart
   end
 
-  class Rule
-    def initialize(rule = "")
-    end
-  end
-
   module Rules
     DEFAULT = Rule.new
   end
