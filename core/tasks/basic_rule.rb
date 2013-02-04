@@ -6,5 +6,3 @@ class BasicRule < Rule
     super rule, BasicRuleParser
   end
 end
-
-puts BasicRule.new("(+ 1 2)").evaluate
