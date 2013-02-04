@@ -38,7 +38,7 @@ grammar Arithmetic
     '-' space arg:expr
     {
       def to_sexp
-        [:negation, arg.to_sexp]
+        [:negative, arg.to_sexp]
       end
     }
   end

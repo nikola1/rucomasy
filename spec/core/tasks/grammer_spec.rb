@@ -32,8 +32,8 @@ describe 'Parser' do
   end
 
   it "parses negation" do
-    parse('(- ( - 3  1) )').should eq [:negation, [:-, [:number, 3], [:number, 1]]]
-    parse('(- x)').should eq [:negation, [:variable, :x]]
+    parse('(- ( - 3  1) )').should eq [:negative, [:-, [:number, 3], [:number, 1]]]
+    parse('(- x)').should eq [:negative, [:variable, :x]]
   end
 
   it "parses nested expressions" do
