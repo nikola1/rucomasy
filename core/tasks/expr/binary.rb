@@ -9,7 +9,7 @@ class Binary < Expr
       expr.right_operand? @right_operand
   end
 
-  private
+  protected
 
   def left_operand?(expr)
     @left_operand == expr

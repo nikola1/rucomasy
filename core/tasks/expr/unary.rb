@@ -8,7 +8,7 @@ class Unary < Expr
       expr.operand? @operand
   end
 
-  private
+  protected
 
   def operand?(expr)
     @operand == expr
