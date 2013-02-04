@@ -19,39 +19,3 @@ class Binary < Expr
     @right_operand == expr
   end
 end
-
-class Addition < Binary
-  def evaluate(hash = {})
-    @left_operand.evaluate(hash) + @right_operand.evaluate(hash)
-  end
-end
-
-class Substraction < Binary
-  def evaluate(hash = {})
-    @left_operand.evaluate(hash) - @right_operand.evaluate(hash)
-  end
-end
-
-class Multiplication < Binary
-  def evaluate(hash = {})
-    @left_operand.evaluate(hash) * @right_operand.evaluate(hash)
-  end
-end
-
-class Division < Binary
-  def evaluate(hash = {})
-    @left_operand.evaluate(hash) / @right_operand.evaluate(hash)
-  end
-end
-
-class Maximum < Binary
-  def evaluate(hash = {})
-    [@left_operand.evaluate(hash), @right_operand.evaluate(hash)].max
-  end
-end
-
-class Minimum < Binary
-  def evaluate(hash = {})
-    [@left_operand.evaluate(hash), @right_operand.evaluate(hash)].min
-  end
-end

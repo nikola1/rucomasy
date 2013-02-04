@@ -1,3 +1,17 @@
 require_relative './expr/expr'
+
 require_relative './expr/binary'
+require_relative './expr/addition'
+require_relative './expr/substraction'
+require_relative './expr/multiplication'
+require_relative './expr/division'
+require_relative './expr/maximum'
+require_relative './expr/minimum'
+
 require_relative './expr/unary'
+require_relative './expr/number'
+require_relative './expr/variable'
+require_relative './expr/negation'
+require_relative './expr/sine'
+require_relative './expr/cosine'
+require_relative './expr/absolute'
