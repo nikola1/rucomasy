@@ -1,8 +1,4 @@
-require 'treetop'
-require './core/tasks/basic_rule_parser' # FIXME: Should remove line 5 ("Treetop.load 'grammer'") in order to test.
-require './core/tasks/expr'
-
-Treetop.load './core/tasks/grammer'
+require './core/rucomasy_core'
 
 describe 'Basic Rule Parser' do
   def parse(rule)

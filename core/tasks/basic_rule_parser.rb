@@ -1,8 +1,7 @@
 require 'treetop'
-require_relative './rule_parser'
-require_relative './expr'
 
-Treetop.load 'grammer'
+grammer = File.join(File.dirname(__FILE__), 'grammer')
+Treetop.load grammer
 
 class BasicRuleParser < RuleParser
   def self.parse(rule)

@@ -1,5 +1,3 @@
-require './grader'
-
 module SimpleGrader
   include Grader
 

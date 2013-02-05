@@ -1,5 +1,3 @@
-require './task'
-
 class BasicTask
   include Task
 

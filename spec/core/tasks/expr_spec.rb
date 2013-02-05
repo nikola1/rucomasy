@@ -1,5 +1,5 @@
+require './core/rucomasy_core'
 require 'treetop'
-require './core/tasks/expr'
 
 Treetop.load './core/tasks/grammer'
 

@@ -1,7 +1,4 @@
-require 'treetop'
-require './core/tasks/basic_rule'
-
-Treetop.load './core/tasks/grammer'
+require './core/rucomasy_core'
 
 describe 'Basic Rule' do
   def evaluate(rule, hash = {})
