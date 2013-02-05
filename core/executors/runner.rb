@@ -1,32 +1,29 @@
 require 'open3'
-require_relative './runnable.rb'
+require 'immutable_struct'
 
 class Runner
-  def initialize(runnable, limits = {})
-    @runnable, @limits = runnable, limits
+  def initialize(runnable, limits = {}, opts = {})
+    @runnable, @limits, @opts = runnable, limits, opts
   end
 
-  def run(limits = {})
-    limits = @limits.merge limits
+  def run
     out, err, status = run_with_limits limits
 
-    Status.new out, err, status
+    Status.new out, err, status.exitstatus, self
+  end
+
+  def limit(limits = {})
+    @limits = @limits.merge limits
+    self
   end
 
   private
 
   def run_with_limits(limits = @limits)
     Dir.chdir @runnable.path do
-      Open3.capture3 @runnable.command
+      Open3.capture3 @runnable.command, @opts
     end
   end
 
-  class Status
-    attr_reader :output, :error, :exitcode
-
-    def initialize(output, error, status)
-      @output, @error = output, error
-      @exitcode = status.exitstatus
-    end
-  end
+  Status = ImmutableStruct.new(:output, :error, :exitcode, :runner)
 end
