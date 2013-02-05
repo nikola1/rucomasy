@@ -1,7 +1,4 @@
-require 'immutable_struct'
-
 module Grader
-  # Result = ImmutableStruct.new(:status, :message, :runtime, :exitcode, :memory, :points)
   class Result
     attr_reader :status, :message, :runtime, :exitcode, :memory, :points
 
