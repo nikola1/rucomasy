@@ -4,7 +4,7 @@ module Task
   end
 
   module Rules
-    DEFAULT = Rule.new
+    # DEFAULT = BasicRule
   end
 
   module Limits
