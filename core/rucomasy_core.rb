@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 # compilers
 require 'compilers/compiler'
+require 'compilers/basic_native_compiler'
 require 'compilers/cpp_compiler'
 
 # executors
@@ -23,4 +24,3 @@ require 'tasks/task'
 require 'tasks/basic_rule'
 require 'tasks/basic_rule_parser'
 require 'tasks/basic_task'
-
