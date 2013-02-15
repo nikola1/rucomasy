@@ -29,7 +29,6 @@ module BasicNativeCompiler
   end
 
   def create_directory
-    puts TMP_DIR_LOCATION
     directory = File.join TMP_DIR_LOCATION, random_dirname
     if File.exists? directory
       raise CompilationError, "Destination directory already exists."

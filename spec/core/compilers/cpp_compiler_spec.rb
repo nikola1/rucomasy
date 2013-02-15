@@ -33,7 +33,6 @@ describe 'C++ Compiler' do
 
   it "compiles hello_world.cpp" do
     status, runnable = compile('hello_world.cpp')
-    puts runnable.path
     successful?(status).should eq true
 
     runnable.should_not eq nil
