@@ -6,6 +6,8 @@ module BasicNativeCompiler
 
   private
 
+  @tmp_dir_location = File.join File.dirname(__FILE__), '../tmp/'
+
   def prepare_compile_command(source_file, destination)
     @compiler_command_options.map do |option|
       option.gsub /%SOURCE%|%DESTINATION%/,
@@ -18,7 +20,7 @@ module BasicNativeCompiler
   end
 
   def create_runnable(command, destination)
-    Runnable.new(command, File.dirname(destination))
+    Runnable.new command, File.dirname(destination)
   end
 
   def prepare_executable
@@ -27,12 +29,12 @@ module BasicNativeCompiler
   end
 
   def create_directory
-    directory_name = "../tmp/#{Time.now.to_i}_#{Process.pid}"
-    if File.exists? directory_name
+    directory = File.join @tmp_dir_location, "#{Time.now.to_i}_#{Process.pid}"
+    if File.exists? directory
       raise CompilationError, "Destination directory already exists."
     else
-      FileUtils.mkdir_p directory_name
+      FileUtils.mkdir_p directory
     end
-    File.absolute_path directory_name
+    File.absolute_path directory
   end
 end
