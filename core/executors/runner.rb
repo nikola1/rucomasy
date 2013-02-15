@@ -7,13 +7,13 @@ class Runner
   end
 
   def run
-    out, err, status = run_with_limits limits
+    out, err, status = run_with_limits
 
     Status.new out, err, status.exitstatus, self
   end
 
   def limit(limits = {})
-    @limits = @limits.merge limits
+    @limits |= limits
     self
   end
 

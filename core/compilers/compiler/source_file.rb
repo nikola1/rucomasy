@@ -1,7 +1,7 @@
 module Compiler
   class SourceFile < File
-    def initialize(filename, mode = "r", *opt)
-      super File.absolute_path(filename), mode, *opt
+    def initialize(filename)
+      super File.absolute_path(filename)
     end
   end
 end

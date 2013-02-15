@@ -6,7 +6,7 @@ module BasicNativeCompiler
 
   private
 
-  @tmp_dir_location = File.join File.dirname(__FILE__), '../tmp/'
+  TMP_DIR_LOCATION = File.join File.dirname(__FILE__), '../tmp/'
 
   def prepare_compile_command(source_file, destination)
     @compiler_command_options.map do |option|
@@ -16,7 +16,7 @@ module BasicNativeCompiler
   end
 
   def create_command(executable)
-    executable.to_s
+    "./#{executable}"
   end
 
   def create_runnable(command, destination)
@@ -29,12 +29,17 @@ module BasicNativeCompiler
   end
 
   def create_directory
-    directory = File.join @tmp_dir_location, "#{Time.now.to_i}_#{Process.pid}"
+    puts TMP_DIR_LOCATION
+    directory = File.join TMP_DIR_LOCATION, random_dirname
     if File.exists? directory
       raise CompilationError, "Destination directory already exists."
     else
       FileUtils.mkdir_p directory
     end
     File.absolute_path directory
+  end
+
+  def random_dirname
+    "#{Time.now.to_i}_#{Process.pid}_#{Random.rand(6661313)}"
   end
 end

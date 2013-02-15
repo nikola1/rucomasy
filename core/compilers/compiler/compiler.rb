@@ -9,8 +9,12 @@ module Compiler
 
     after_compilation(source_file, destination)
 
-    command = create_command(executable)
-    return status, create_runnable(command, destination)
+    if status.success
+      command = create_command(executable)
+      return status, create_runnable(command, destination)
+    else
+      return status, nil
+    end
   end
 
   private
