@@ -9,16 +9,6 @@ class Runnable
     @dirname              = File.basename @path
   end
 
-  # FIX: Linux only
-  def timelimit(seconds)
-    Runnable.new "timeout #{seconds} #{@command}", @directory, @parameters
-  end
-
-  # FIX: Not implemented
-  def memorilimit(seconds)
-    self
-  end
-
   def move_to(directory)
     directory = File.absolute_path directory
 
