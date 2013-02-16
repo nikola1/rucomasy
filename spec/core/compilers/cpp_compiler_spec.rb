@@ -1,6 +1,8 @@
 require 'fileutils'
 require './core/rucomasy_core'
 
+require_relative '../source_examples'
+
 describe 'C++ Compiler' do
   before(:all) do
     # Create new tmp directory for testing the compilation
@@ -14,13 +16,13 @@ describe 'C++ Compiler' do
     FileUtils.rm_r @tmp_dir_location
   end
 
+  def get_cpp_file_location(filename)
+    SourceExamples.get_file_location filename, 'cpp'
+  end
+
   def compile(filename)
     file_location = get_cpp_file_location(filename)
     CppCompiler.compile(Compiler::SourceFile.new(file_location))
-  end
-
-  def get_cpp_file_location(filename)
-    File.join File.dirname(__FILE__), '../source_examples/cpp', filename
   end
 
   def successful?(status)
