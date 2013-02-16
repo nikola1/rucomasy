@@ -20,7 +20,7 @@ describe 'C++ Compiler' do
   end
 
   def get_cpp_file_location(filename)
-    File.join File.dirname(__FILE__), 'example_sources/cpp', filename
+    File.join File.dirname(__FILE__), '../source_examples/cpp', filename
   end
 
   def successful?(status)
