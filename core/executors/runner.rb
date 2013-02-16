@@ -8,7 +8,7 @@ class Runner
                       stack: :rlimit_stack }
 
   def initialize(runnable, limits = {})
-    @runnable, @limits, @opts = runnable, limits
+    @runnable, @limits = runnable, limits
   end
 
   def run
