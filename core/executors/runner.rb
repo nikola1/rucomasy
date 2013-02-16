@@ -23,7 +23,7 @@ class Runner
   end
 
   def remove_limits(limits = [])
-    limits.each { |limit| @limits.remove limit }
+    limits.each { |limit| @limits.delete limit }
     self
   end
 

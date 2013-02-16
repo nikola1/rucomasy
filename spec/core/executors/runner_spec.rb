@@ -29,8 +29,12 @@ describe 'Runner' do
     status.success
   end
 
+  def make_runner(runnable, limits = {})
+    Runner.new(runnable, limits)
+  end
+
   def run(runnable, limits = {})
-    Runner.new(runnable, limits).run
+    make_runner(runnable, limits).run
   end
 
   it "runs ok" do
@@ -72,5 +76,28 @@ describe 'Runner' do
     run_status = run(runnable, memory: 64*1024*1024, time: 1)
     run_status.exitcode.should_not eq 0
     run_status.reason.should eq :TLE
+  end
+
+  it "add limits and then runs" do
+    status, runnable = compile('timelimit.cpp')
+    successful?(status).should eq true
+    runnable.should_not eq nil
+
+    runner = make_runner(runnable)
+    runner.add_limits(time: 1).run.reason.should eq :TLE
+
+    runner = make_runner(runnable)
+    runner.add_limits(time: 1)
+    runner.run.reason.should eq :TLE
+  end
+
+  it "remove limits and then runs" do
+    status, runnable = compile('hello_world.cpp')
+
+    runner = make_runner(runnable, memory: 1024)
+    runner.run.reason.should_not eq :OK
+
+    runner = make_runner(runnable, memory: 1024)
+    runner.remove_limits([:memory]).run.reason.should eq :OK
   end
 end
