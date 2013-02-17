@@ -11,6 +11,10 @@ require 'compilers/cpp_compiler'
 require 'executors/runnable'
 require 'executors/runner'
 
+# checkers
+require 'checkers/checker'
+require 'checkers/simple_io_checker'
+
 # graders
 require 'graders/grader'
 require 'graders/simple_grader'
