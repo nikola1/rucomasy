@@ -22,11 +22,11 @@ require 'graders/simple_grader'
 # tasks
 require 'tasks/expr'
 require 'tasks/rule'
-require 'tasks/rule_parser'
-require 'tasks/task'
-
 require 'tasks/basic_rule'
+require 'tasks/rule_parser'
 require 'tasks/basic_rule_parser'
+
+require 'tasks/task'
 require 'tasks/basic_task'
 
 require 'tasks/simple_io_testcase'
