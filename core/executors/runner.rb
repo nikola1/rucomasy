@@ -30,7 +30,7 @@ class Runner
   private
 
   def run_with_limits(limits = @limits)
-    Dir.chdir @runnable.path do
+    Dir.chdir @runnable.fullpath do
       Open3.capture3 @runnable.command, parse_rlimits(limits)
     end
   end
