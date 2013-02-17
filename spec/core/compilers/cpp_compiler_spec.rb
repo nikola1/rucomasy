@@ -21,8 +21,8 @@ describe 'C++ Compiler' do
   end
 
   def compile(filename)
-    file_location = get_cpp_file_location(filename)
-    CppCompiler.compile(Compiler::SourceFile.new(file_location))
+    file_location = get_cpp_file_location filename
+    CppCompiler.compile Compiler::SourceFile.new(file_location)
   end
 
   def successful?(status)
@@ -34,7 +34,7 @@ describe 'C++ Compiler' do
   end
 
   it "compiles hello_world.cpp" do
-    status, runnable = compile('hello_world.cpp')
+    status, runnable = compile 'hello_world.cpp'
     successful?(status).should eq true
 
     runnable.should_not eq nil
@@ -43,7 +43,7 @@ describe 'C++ Compiler' do
   end
 
   it "doesn't compile broken.cpp" do
-    status, runnable = compile('broken.cpp')
+    status, runnable = compile 'broken.cpp'
     successful?(status).should eq false
     runnable.should eq nil
   end

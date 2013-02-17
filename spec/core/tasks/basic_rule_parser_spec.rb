@@ -2,13 +2,13 @@ require './core/rucomasy_core'
 
 describe 'Basic Rule Parser' do
   def parse(rule)
-    BasicRuleParser.parse(rule)
+    BasicRuleParser.parse rule
   end
 
   # It is already tested so we can use it verify that everything parsed by
   # the BasicRuleParser is the same as what is expected to be parsed.
   def build(rule)
-    Expr.build(ArithmeticParser.new.parse(rule).to_sexp)
+    Expr.build ArithmeticParser.new.parse(rule).to_sexp
   end
 
   it "parse simple structures" do

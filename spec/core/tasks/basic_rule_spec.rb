@@ -2,7 +2,7 @@ require './core/rucomasy_core'
 
 describe 'Basic Rule' do
   def evaluate(rule, hash = {})
-    BasicRule.new(rule).evaluate(hash)
+    BasicRule.new(rule).evaluate hash
   end
 
   it "evaluates variables" do
