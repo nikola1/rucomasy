@@ -1,5 +1,7 @@
-class Number < Unary
-  def evaluate(hash = {})
-    @operand
+module Rucomasy
+  class Number < Unary
+    def evaluate(hash = {})
+      @operand
+    end
   end
 end

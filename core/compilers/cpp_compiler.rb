@@ -1,8 +1,10 @@
-module CppCompiler
-  extend BasicNativeCompiler
+module Rucomasy
+  module CppCompiler
+    extend BasicNativeCompiler
 
-  private
+    private
 
-  @compiler_command_options = ["g++", "%SOURCE%", "-o", "%DESTINATION%",
-                               "-O2" , "-s", "-static", "-lm", "-x", "c++"]
+    @compiler_command_options = ["g++", "%SOURCE%", "-o", "%DESTINATION%",
+                                 "-O2" , "-s", "-static", "-lm", "-x", "c++"]
+  end
 end

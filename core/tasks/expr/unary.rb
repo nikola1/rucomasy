@@ -1,16 +1,18 @@
-class Unary < Expr
-  def initialize(operand)
-    @operand = operand
-  end
+module Rucomasy
+  class Unary < Expr
+    def initialize(operand)
+      @operand = operand
+    end
 
-  def ==(expr)
-    self.class == expr.class and
-      expr.operand? @operand
-  end
+    def ==(expr)
+      self.class == expr.class and
+        expr.operand? @operand
+    end
 
-  protected
+    protected
 
-  def operand?(expr)
-    @operand == expr
+    def operand?(expr)
+      @operand == expr
+    end
   end
 end

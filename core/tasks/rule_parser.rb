@@ -1,12 +1,14 @@
-class RuleParser
-  def self.parse(rule, parse, expr)
-    expr.build(parse.(rule))
-  rescue
-    raise ParsingError, "Wrong rule syntax."
-  end
+module Rucomasy
+  class RuleParser
+    def self.parse(rule, parse, expr)
+      expr.build(parse.(rule))
+    rescue
+      raise ParsingError, "Wrong rule syntax."
+    end
 
-  private
+    private
 
-  class ParsingError < Exception
+    class ParsingError < Exception
+    end
   end
 end

@@ -1,5 +1,7 @@
 require 'immutable_struct'
 
-module Checker
-  Status = ImmutableStruct.new(:message, :points)
+module Rucomasy
+  module Checker
+    Status = ImmutableStruct.new(:message, :points)
+  end
 end

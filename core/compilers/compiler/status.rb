@@ -1,10 +1,12 @@
-module Compiler
-  class Status
-    attr_reader :output, :error, :success
+module Rucomasy
+  module Compiler
+    class Status
+      attr_reader :output, :error, :success
 
-    def initialize(output, error, status)
-      @output, @error = output, error
-      @success = status.success?
+      def initialize(output, error, status)
+        @output, @error = output, error
+        @success = status.success?
+      end
     end
   end
 end
