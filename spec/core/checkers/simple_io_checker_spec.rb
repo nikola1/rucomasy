@@ -36,12 +36,12 @@ describe 'Simple Input/Output Checker' do
     testcase = SimpleIOTestcase.new test_file, test_file
 
     write_to_file answer_file, "1"
-    checker_status = SimpleIOChecker.check_from_file File.new(answer_file), testcase
+    checker_status = SimpleIOChecker.check_from_file answer_file, testcase
     checker_status.message.should eq "OK"
     checker_status.points.should eq 1.0
 
     write_to_file answer_file, "2"
-    checker_status = SimpleIOChecker.check_from_file File.new(answer_file), testcase
+    checker_status = SimpleIOChecker.check_from_file answer_file, testcase
     checker_status.message.should eq "WA"
     checker_status.points.should eq 0.0
   end
