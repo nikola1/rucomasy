@@ -1,7 +1,9 @@
 module Compiler
-  class SourceFile < File
+  class SourceFile
+    attr_reader :path
+
     def initialize(filename)
-      super File.absolute_path(filename)
+      @path = File.absolute_path(filename)
     end
   end
 end
