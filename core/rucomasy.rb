@@ -15,6 +15,9 @@ require 'executors/runner'
 require 'checkers/checker'
 require 'checkers/simple_io_checker'
 
+# helpers
+require 'helpers/compile_helper'
+
 # graders
 require 'graders/grader'
 require 'graders/simple_grader'
@@ -30,3 +33,4 @@ require 'tasks/task'
 require 'tasks/basic_task'
 
 require 'tasks/simple_io_testcase'
+
