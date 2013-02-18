@@ -2,9 +2,11 @@ module Rucomasy
   class BasicTask
     include Task
 
-    attr_reader :statement, :type, :test_cases, :checker, :runner, :rule, :limits
+    attr_reader :name, :statement, :type, :test_cases, :checker, :runner,
+      :rule, :limits
 
     def initialize(description = {})
+      @name       = description.fetch :name,       ""
       @statement  = description.fetch :statement,  ""
       @type       = description.fetch :type,       Types::STANDART
       @test_cases = description.fetch :test_cases, []
