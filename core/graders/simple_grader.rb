@@ -16,6 +16,8 @@ module Rucomasy
       end
     end
 
+    private
+
     def grade_solution(task, solution)
       [].tap do |result|
         grade_test_cases(task, solution) do |test_case, test_result|

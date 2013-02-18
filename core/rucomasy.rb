@@ -31,5 +31,7 @@ require 'tasks/basic_task'
 require 'tasks/testcase'
 require 'tasks/simple_io_testcase'
 
+require 'tasks/solution'
+
 # graders
 require 'graders/simple_grader'
