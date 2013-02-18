@@ -18,10 +18,6 @@ require 'checkers/simple_io_checker'
 # helpers
 require 'helpers/compile_helper'
 
-# graders
-require 'graders/grader'
-require 'graders/simple_grader'
-
 # tasks
 require 'tasks/expr'
 require 'tasks/rule'
@@ -32,5 +28,8 @@ require 'tasks/basic_rule_parser'
 require 'tasks/task'
 require 'tasks/basic_task'
 
+require 'tasks/testcase'
 require 'tasks/simple_io_testcase'
 
+# graders
+require 'graders/simple_grader'
