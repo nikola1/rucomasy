@@ -72,6 +72,9 @@ module Rucomasy
       runner.add_options(time: 1).run.reason.should eq :TLE
 
       runner = make_runner(runnable)
+      runner.run(time: 1).reason.should eq :TLE
+
+      runner = make_runner(runnable)
       runner.add_options time: 1
       runner.run.reason.should eq :TLE
     end

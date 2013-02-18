@@ -16,8 +16,8 @@ module Rucomasy
       @runnable, @options = runnable, options
     end
 
-    def run
-      out, err, status = run_with_options
+    def run(additional_options = {})
+      out, err, status = run_with_options @options.merge additional_options
 
       Status.new out, err, status
     end
@@ -45,7 +45,7 @@ module Rucomasy
     end
 
     class Status
-      attr_reader :output, :error, :exitcode, :termsig, :stopsig
+      attr_reader :output, :error, :exitcode, :termsig, :stopsig, :time, :memory
 
       ME_SIG_CODE = 6
       TL_SIG_CODE = 9
@@ -56,6 +56,9 @@ module Rucomasy
         @exitcode       = status.exitstatus
         @termsig        = status.termsig
         @stopsig        = status.stopsig
+        # TODO:
+        @time           = 0.0
+        @memory         = 0.0
       end
 
       def successful?
