@@ -1,44 +1,25 @@
 require 'fileutils'
 require './core/rucomasy'
+require './spec/rspec/compilation_helper'
 
-require_relative '../source_examples'
 module Rucomasy
+  RSpec.configure do |c|
+    c.include CompilationHelper
+  end
+
   describe Runner do
     before(:all) do
-      # Create new tmp directory for testing the compilation
-      @tmp_dir_location = File.join File.dirname(__FILE__), 'tmp'
-      FileUtils.mkdir @tmp_dir_location unless File.exists? @tmp_dir_location
-
-      BasicNativeCompiler.const_set :TMP_DIR_LOCATION, @tmp_dir_location
+      create_tmp_dir
+      change_basic_native_compilers_tmp_dir
     end
 
     after(:all) do
-      FileUtils.rm_r @tmp_dir_location
-    end
-
-    def get_text_file_location(filename)
-      SourceExamples.get_file_location filename, 'textfile'
-    end
-
-    def get_cpp_file_location(filename)
-      SourceExamples.get_file_location filename, 'cpp'
+      remove_tmp_dir
     end
 
     def compile(filename)
       file_location = get_cpp_file_location filename
       CppCompiler.compile Compiler::SourceFile.new(file_location)
-    end
-
-    def successful?(status)
-      status.success
-    end
-
-    def make_runner(runnable, options = {})
-      Runner.new(runnable, options)
-    end
-
-    def run(runnable, options = {})
-      make_runner(runnable, options).run
     end
 
     it "runs ok" do

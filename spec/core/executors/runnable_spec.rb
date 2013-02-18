@@ -1,22 +1,15 @@
 require 'fileutils'
 require './core/rucomasy'
+require './spec/rspec/compilation_helper'
 
 module Rucomasy
+  RSpec.configure do |c|
+    c.include CompilationHelper
+  end
+
   describe Runnable do
     def random_subdir(dir = File.dirname(__FILE__))
       File.join dir, random_dirname
-    end
-
-    def random_dirname
-      "#{Time.now.to_i}_#{Process.pid}_#{Random.rand(6661313)}"
-    end
-
-    def exists?(dirname)
-      File.exists? dirname
-    end
-
-    def fullpath(dirname)
-      File.absolute_path dirname
     end
 
     before(:each) do

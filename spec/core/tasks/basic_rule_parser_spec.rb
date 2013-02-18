@@ -1,4 +1,5 @@
 require './core/rucomasy'
+
 module Rucomasy
   describe BasicRuleParser do
     def parse(rule)
