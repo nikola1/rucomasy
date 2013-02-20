@@ -3,13 +3,21 @@ require 'sinatra/base'
 require 'yaml'
 
 module RucomasyStructure
-  CONTROLLERS = 'app/controllers/*.rb'
-  MODELS      = 'app/models/*.rb'
+  # Folders
+  MODELS      = 'app/models'
+  VIEWS       = 'app/views'
+  CONTROLLERS = 'app/controllers'
+
+  # Files
   SETTINGS    = 'config/sinatra.yml'
+
+  def self.load(filename)
+    load filename if filename =~ %r[\.rb\z]
+  end
 end
 
-Dir[RucomasyStructure::CONTROLLERS].each { |file| load file }
-Dir[RucomasyStructure::MODELS].each      { |file| load file }
+Dir[RucomasyStructure::CONTROLLERS].each { |file| RucomasyStructure.load file }
+Dir[RucomasyStructure::MODELS].each      { |file| RucomasyStructure.load file }
 
 class RucomasyWebApp < Sinatra::Base
   # Load controllers
