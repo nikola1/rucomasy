@@ -7,6 +7,7 @@ module RucomasyStructure
   MODELS      = 'app/models'
   VIEWS       = 'app/views'
   CONTROLLERS = 'app/controllers'
+  PUBLIC      = 'webroot'
 
   # Files
   SETTINGS    = 'config/sinatra.yml'
@@ -32,6 +33,10 @@ class RucomasyWebApp < Sinatra::Base
   YAML.load(File.open RucomasyStructure::SETTINGS)[settings.environment.to_s].each do |k, v|
     set k.to_sym, v
   end rescue NoMethodError
+
+  # Menual settings
+  set :public_folder, RucomasyStructure::PUBLIC
+  set :views, RucomasyStructure::VIEWS
 end
 
 run RucomasyWebApp
