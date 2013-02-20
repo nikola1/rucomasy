@@ -1,6 +1,8 @@
+require 'data_mapper'
 require 'sinatra/base'
 
-Dir['app/controllers/*'].each { |file| load file }
+Dir['app/controllers/*.rb'].each { |file| load file }
+Dir['app/models/*.rb'].each { |file| load file }
 
 class RucomasyApp < Sinatra::Base
   Object.constants.each do |c|
@@ -10,4 +12,5 @@ class RucomasyApp < Sinatra::Base
       end
   end
 end
+
 run RucomasyApp
