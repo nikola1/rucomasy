@@ -1,0 +1,9 @@
+# config/application.yml
+defaults:
+
+development:
+
+production:
+
+rspec:
+
