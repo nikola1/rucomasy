@@ -1,30 +1,8 @@
-<div id="subnav">
-    <div class="subbox">
-        <div class="head"> <div class="text"> Contest </div> </div>
-            <div class="text">
-                Name: <%= @contest.name %> <br />
-                Start: <%= @contest.start_date.strftime("%d/%m/%y %k:%M") %> <br/>
-                End: <%= @contest.end_date.strftime("%d/%m/%y %k:%M") %> <br/>
-                Now: <%= Time.now.strftime("%d/%m/%y %k:%M") %> <br/>
-            </div>
-    </div>
-    <% unless @contest.tasks.empty? %>
-    <div class="subbox">
-        <div class="head"> <div class="text"> Tasks </div> </div>
-            <div class="text">
-                <% @contest.tasks.each do |task| %>
-                    <a href="/task/<%= task.id %>"><%= task.name %></a></br>
-                <% end %>
-            </div>
-    </div>
-    <% end %>
-</div>
+<%= erb :sidebar, locals: {contest: @contest} %>
 
 <div id="content">
-    <div class="topic"> <%= title %> </div>
-    <div class="text">
-        <div class="contentbox">
-            <%= @contest.description %> <br/>
-        </div>
+    <h1><%= title %></h1>
+    <div class="content_box">
+        <%= @contest.description %>
     </div>
 </div>

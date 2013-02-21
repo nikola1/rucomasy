@@ -1,30 +1,23 @@
 <div id="content">
-    <div class="topic"> Contests </div>
-    <div class="text">
-        <div class="contentbox">
-            <table border='1px'>
-                <% @contests.each do |contest| %>
-                    <tr style="padding: 10px">
-                        <td style="padding: 10px">
-                            <%= contest.name %>
-                        </td>
-                        <td  style="padding: 10px">
-                            <%= contest.start_date.strftime("%e %B %Y %k:%M") %>
-                        </td>
-                        <td  style="padding: 10px">
-                            <%= contest.end_date.strftime("%e %B %Y %k:%M") %>
-                        </td>
-                        <td style="padding: 10px">
-                            <% if contest.has_started? %>
-                                <a href="/contest/<%= contest.id %>">
-                                    <%= contest.in_progress? ? 'Compete' : 'View' %>
-                                </a>
-                            <% else %>
-                                Not started
-                            <% end %>
-                        </td>
-                <% end %>
-            </table>
-        </div>
+    <h1>Contests</h1>
+    <div class="content_box">
+        <table id="contests">
+            <% @contests.each do |contest| %>
+                <tr>
+                    <td><%= contest.name %></td>
+                    <td><%= contest.start_date.strftime("%e %B %Y, %k:%M") %></td>
+                    <td><%= contest.end_date.strftime("%e %B %Y, %k:%M") %></td>
+                    <td>
+                        <% if contest.has_started? %>
+                            <a href="/contest/<%= contest.id %>">
+                                <%= contest.in_progress? ? 'Compete' : 'View' %>
+                            </a>
+                        <% else %>
+                            Not started
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </table>
     </div>
 </div>

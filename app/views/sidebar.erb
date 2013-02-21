@@ -1,0 +1,34 @@
+<div id="sidebar">
+    <div class="side_box">
+        <h2>Contest</h2>
+        <ul>
+            <li>
+                <label>Name:</label>
+                <%= contest.name %>
+            </li>
+            <li>
+                <label>Start:</label>
+               <%= contest.start_date.strftime("%e %b %Y, <strong>%k:%M</strong>") %>
+            </li>
+            <li>
+                <label>End:</label>
+                <%= contest.end_date.strftime("%e %b %Y, <strong>%k:%M</strong>") %>
+            </li>
+            <li>
+                <label>Now:</label>
+                <%= Time.now.strftime("%e %b %Y, <strong>%k:%M</strong>") %>
+            </li>
+        </ul>
+    </div>
+
+    <% unless contest.tasks.empty? %>
+        <div class="side_box">
+            <h2>Tasks</h2>
+            <ul>
+                <% contest.tasks.each do |task| %>
+                    <li><a href="/task/<%= task.id %>"><%= task.name %></a></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+</div>
