@@ -1,0 +1,233 @@
+#!/usr/bin/env ruby
+require 'trollop'
+require 'data_mapper'
+require '../core/rucomasy'
+
+# DataMapper::Logger.new(STDOUT, :debug)
+
+DataMapper.setup(:default, "sqlite://#{File.absolute_path '../db/development.db'}")
+
+module RucomasyStructure
+  # Folders
+  MODELS      = 'app/models'
+  VIEWS       = 'app/views'
+  CONTROLLERS = 'app/controllers'
+  HELPERS     = 'app/helpers'
+
+  PUBLIC      = 'webroot'
+  FILES       = 'files'
+
+  # Files
+  SETTINGS    = 'config/sinatra.yml'
+
+  def self.require_files_from(dirname)
+    Dir[File.join '..', dirname, '*.rb'].each do |file|
+      require "./#{file}"
+    end
+  end
+end
+
+RucomasyStructure.require_files_from RucomasyStructure::MODELS
+
+DataMapper.auto_upgrade!
+DataMapper.finalize
+
+def wait_for(commands)
+  Trollop::options do
+    stop_on commands
+  end
+  ARGV.shift
+end
+
+action = wait_for %w(add edit delete list)
+
+CHARS_PER_LINE = 80
+
+class ContestManager
+  attr_reader :contest
+
+  def initialize(contest)
+    @contest = contest
+  end
+
+  def save
+    if @contest.save
+      puts "Contest saved successfuly."
+      print
+    else
+      puts "Contest not saved."
+    end
+  end
+
+  def delete
+    ContestManager.delete @contest.id
+  end
+
+  def print
+    ContestManager.print @contest
+  end
+
+  def self.fetch(id)
+    if (contest = Contest.get id)
+      new contest
+    else
+      nil
+    end
+  end
+
+  def self.create(attributes)
+    new Contest.new(attributes)
+  end
+
+  def self.add(attributes)
+    create(attributes).save
+  end
+
+  def self.select(attributes)
+    Contest.all(attributes).map { |contest| new contest }
+  end
+
+  def self.delete(id)
+    if Contest.get(id).destroy
+      puts "Contest was successfully deleted!"
+    else
+      puts "The contest was not deleted."
+    end
+  end
+
+  def self.delete_matching(all = false, attributes)
+    contests = select attributes
+
+    if contests.count == 0
+      puts "Such a contest doesn't exist."
+    elsif contests.count == 1
+      contests.first.delete
+    else
+      if all
+        contests.each &:delete
+      else
+        contests.each &:print
+        puts "Pick one? (by contest id)"
+        delete STDIN.readline.to_i
+      end
+    end
+  end
+
+  def self.edit(attributes)
+    contest = fetch attributes[:id]
+
+    if contest
+      attributes.each { |k, v| contest.attribute_set k, v }
+      if contest.save
+        puts "Contest saved successfully."
+        print contest
+      else
+        puts "Contest not saved."
+      end
+    else
+      puts "Such a contest doesn't exist."
+    end
+  end
+
+  def self.print(contest)
+    puts "Name: #{contest.name}".ljust(40) + "Start date: #{contest.start_date}"
+    puts "Contest id: #{contest.id}".ljust(40) + "End date:   #{contest.end_date}"
+    unless contest.description.nil?
+      puts "-" * CHARS_PER_LINE
+      puts "Description:"
+      puts contest.description.chars.each_slice(CHARS_PER_LINE).map { |x| x.join.lstrip }.join "\n"
+    end
+    puts "=" * CHARS_PER_LINE
+  end
+
+  def method_missing(name, *arg, &block)
+    @contest.send name, *arg, &block
+  end
+end
+
+class TaskManager
+  def initialize(task)
+    @task = task
+  end
+
+  def delete
+    if Task.get(id).destroy
+      puts "The task was successfully deleted!"
+    else
+      puts "The task was not deleted."
+    end
+  end
+
+  def print
+    puts "Name: #{@task.name}".ljust(40) + "Runner:  #{@task.runner}"
+    puts "Task id: #{@task.id}#{', Contest: ' + @task.contest.name if @task.contest}".ljust(40) + "Checker: #{@task.checker}"
+    unless @task.statement.nil?
+      puts "-" * CHARS_PER_LINE
+      puts "Statement:"
+      puts @task.statement.chars.each_slice(CHARS_PER_LINE).map { |x| x.join.lstrip }.join "\n"
+    end
+    puts "=" * CHARS_PER_LINE
+  end
+end
+
+if action == 'list'
+  domain = wait_for %w(contests tasks)
+
+  puts "=" * CHARS_PER_LINE
+  if domain == 'contests'
+    ContestManager.select(order: [:start_date.desc]).each &:print
+  else
+    Task.all(order: [:id.desc]).each do |task|
+      print_task task
+    end
+  end
+else
+  domain = wait_for %w(contest task)
+
+  cmd_opts = Trollop::options do
+    opt :all, "Apply action on all matching objects.", defaul: false if action == 'delete'
+    case domain
+      when "contest"
+       opt :id, "Contest id", type: :int, required: true unless action == 'add'
+       opt :name, "Name of the contest", type: :string, required: (action == 'add')
+       opt :description, "Description of the contest", type: :string
+       opt :start_date, "Start date", type: :string, required: (action == 'add')
+       opt :end_date, "End date", type: :string, required: (action == 'add')
+      when "task"
+        opt :name, "Task name"
+        opt :statement, "Task statement"
+        opt :checker, "Checker"
+        opt :runner, "Solutions runner"
+        opt :rule, "Points evaluation rule"
+        opt :limits, "Limits"
+        opt :testcases, "Test cases"
+        opt :contest, "Contest"
+      when "testcase"
+        opt :number, "Testcase number"
+        opt :input, "Input file"
+        opt :output, "Output file"
+      else
+        Trollop::die "unknown subcommand #{domain.inspect}"
+    end
+  end
+
+  cmd_opts.delete :help
+  cmd_opts.reject! { |x| x.to_s =~ /_given\z/ }
+  all = cmd_opts[:all]
+  cmd_opts.delete :all
+
+  if domain == 'contest'
+    cmd_opts.reject! { |k, v| v.nil? }
+    cmd_opts[:start_date] = DateTime.parse cmd_opts[:start_date] unless cmd_opts[:end_date].nil?
+    cmd_opts[:end_date] = DateTime.parse cmd_opts[:end_date] unless cmd_opts[:end_date].nil?
+
+    if action == 'add'
+      ContestManager.add cmd_opts
+    elsif action == 'delete'
+      ContestManager.delete_matching all, cmd_opts
+    elsif action == 'edit'
+      ContestManager.edit cmd_opts
+    end
+  elsif domain == 'task'
+  end
+end
