@@ -1,0 +1,60 @@
+<div id="subnav">
+    <div class="subbox">
+        <div class="head"> <div class="text"> Contest </div> </div>
+            <div class="text">
+                Name: <%= @task.contest.name %> <br />
+                Start: <%= @task.contest.start_date.strftime("%d/%m/%y %k:%M") %> <br/>
+                End: <%= @task.contest.end_date.strftime("%d/%m/%y %k:%M") %> <br/>
+                Now: <%= Time.now.strftime("%d/%m/%y %k:%M") %> <br/>
+            </div>
+    </div>
+    <div class="subbox">
+        <div class="head"> <div class="text"> Tasks </div> </div>
+            <div class="text">
+                <% @task.contest.tasks.each do |task| %>
+                    <a href="/task/<%= task.id %>"><%= task.name %></a><br />
+                <% end %>
+            </div>
+    </div>
+</div>
+
+<div id="content">
+    <div class="topic"> <%= title %> </div>
+    <div class="text">
+        <div class="contentbox">
+            <h3> Statement </h3>
+            <%= @task.statement %> <br/>
+        </div>
+        <div class="contentbox">
+            <h3> Submit solution </h3>
+            <form method="post" enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <td> Username: </td>
+                        <td align="right"> <input type="text" name="username"> </td>
+                    </tr>
+                    <tr>
+                        <td> Password: </td>
+                        <td align="right"> <input type="password" name="password"> </td>
+                    </tr>
+                    <tr>
+                        <td> Language: </td>
+                        <td>
+                            <select name="language">
+                              <option value="cpp" default="true">C++</option>
+                              <option value="java" disabled="true">Java</option>
+                              <option value="ruby" disabled="true">Ruby</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"> <input type="file" name="file"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"> <input type="submit" value="Submit"> </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
