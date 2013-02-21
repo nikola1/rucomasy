@@ -11,5 +11,5 @@ class Task
 
   has n, :testcases
 
-  belongs_to :contest, key: true
+  belongs_to :contest
 end

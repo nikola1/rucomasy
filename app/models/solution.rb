@@ -6,5 +6,5 @@ class Solution
   property :language,    String,   required: true
   property :created_at,  DateTime
 
-  belongs_to :submission, key: true
+  belongs_to :submission
 end

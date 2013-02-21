@@ -1,4 +1,4 @@
-class Testcase
+class Testcase < Rucomasy::SimpleIOTestcase
   include DataMapper::Resource
 
   property :id,     Serial,  serial: true
@@ -6,5 +6,5 @@ class Testcase
   property :input,  FilePath
   property :output, FilePath
 
-  belongs_to :task, key: true
+  belongs_to :task
 end

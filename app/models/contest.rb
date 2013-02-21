@@ -4,8 +4,24 @@ class Contest
   property :id,          Serial,   serial: true
   property :name,        String,   required: true
   property :description, Text,     allow_nil: true
-  property :created_at,  DateTime, required: true
-  property :created_at,  DateTime, required: true
+  property :start_date,  DateTime, required: true
+  property :end_date,    DateTime, required: true
 
   has n, :tasks
+
+  validates_with_block do |variable|
+    start_date < end_date
+  end
+
+  def has_started?
+    DateTime.now >= start_date
+  end
+
+  def has_ended?
+    DateTime.now >= start_date
+  end
+
+  def in_progress?
+    has_started? && has_ended?
+  end
 end
