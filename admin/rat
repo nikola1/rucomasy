@@ -1,0 +1,140 @@
+#!/usr/bin/env ruby
+require 'trollop'
+require '../core/rucomasy'
+require '../rucomasy_base'
+require '../db/data_mapper'
+
+require './contest_persistence_manager'
+require './task_persistence_manager'
+
+def wait_for(commands)
+  Trollop::options do
+    stop_on commands
+  end
+  ARGV.shift
+end
+
+def parse(date)
+  DateTime.parse date unless date.nil?
+end
+
+action = wait_for %w(add edit delete list)
+
+CHARS_PER_LINE = 80
+
+if action == 'list'
+  domain = wait_for %w(contests tasks)
+
+  puts "=" * CHARS_PER_LINE
+  if domain == 'contests'
+    ContestPersistanceManager.select(order: [:start_date.desc]).each &:print
+  else
+    TaskPersistanceManager.select(order: [:id.desc]).each &:print
+  end
+else
+  domain = wait_for %w(contest task)
+
+  cmd_opts = Trollop::options do
+    opt :all, "Apply action on all matching objects.", defaul: false if action == 'delete'
+    case domain
+      when "contest"
+        opt :id,
+            "Contest id",
+            type: :int, required: (action == 'edit') unless action == 'add'
+
+        opt :name,
+            "Name of the contest",
+            type: :string, required: (action == 'add')
+
+        opt :description,
+            "Description of the contest",
+            type: :string
+
+        opt :start_date,
+            "Start date",
+            type: :string, required: (action == 'add')
+
+        opt :end_date,
+            "End date",
+            type: :string, required: (action == 'add')
+      when "task"
+        opt :id,
+            "Contest id",
+            type: :int, required: (action == 'edit') unless action == 'add'
+
+        opt :name,
+            "Task name",
+            type: :string, required: (action == 'add')
+
+        opt :statement,
+            "Task statement",
+            type: :string
+
+        opt :checker,
+            "Checker",
+            type: :string
+
+        opt :runner,
+            "Solutions runner",
+            type: :string
+
+        opt :rule,
+            "Points evaluation rule",
+            type: :string
+
+        opt :limits,
+            "Limits",
+            type: :string
+
+        opt :testcases,
+            "Folder with test cases",
+            type: :string
+
+        opt :contest,
+            "Contest",
+            type: :int
+      when "testcase"
+        opt :id,
+            "Testcase id",
+            type: :int if action == 'delete'
+
+        opt :input_folder,
+            "Input files folder",
+            type: :string, required: (action == 'add')
+
+        opt :output_folder,
+            "Output files folder",
+            type: :string, required: (action == 'add')
+
+        opt :task,
+            "Task",
+            type: :int
+      else
+        Trollop::die "unknown subcommand #{domain.inspect}"
+    end
+  end
+  all = cmd_opts[:all]
+  cmd_opts.delete :all
+  cmd_opts.delete :help
+  cmd_opts.reject! { |x| x.to_s =~ /_given\z/ }
+  cmd_opts.reject! { |k, v| v.nil? }
+
+  if domain == 'contest'
+    cmd_opts[:end_date]   = parse cmd_opts[:end_date]
+    cmd_opts[:start_date] = parse cmd_opts[:start_date]
+
+    case action
+    when 'add'    then ContestPersistanceManager.add cmd_opts
+    when 'delete' then ContestPersistanceManager.delete_matching all, cmd_opts
+    when 'edit'   then ContestPersistanceManager.edit cmd_opts
+    end
+  elsif domain == 'task'
+    cmd_opts[:contest] = Contest.get cmd_opts[:contest] if cmd_opts[:contest]
+
+    case action
+    when 'add'    then TaskPersistanceManager.add cmd_opts
+    when 'delete' then TaskPersistanceManager.delete_matching all, cmd_opts
+    when 'edit'   then TaskPersistanceManager.edit cmd_opts
+    end
+  end
+end

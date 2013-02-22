@@ -9,10 +9,6 @@ class Contest
 
   has n, :tasks
 
-  validates_with_block do |variable|
-    start_date < end_date
-  end
-
   def has_started?
     DateTime.now >= start_date
   end
