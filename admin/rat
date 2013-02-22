@@ -4,8 +4,8 @@ require '../core/rucomasy'
 require '../rucomasy_base'
 require '../db/data_mapper'
 
-require './contest_persistence_manager'
-require './task_persistence_manager'
+require './contest_persistance_manager'
+require './task_persistance_manager'
 
 def wait_for(commands)
   Trollop::options do
