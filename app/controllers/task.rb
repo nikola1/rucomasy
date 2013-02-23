@@ -18,9 +18,10 @@ class RucomasyWebApp < Sinatra::Base
       filename = file_upload params[:file]
       if filename
         task = Task.get params[:id]
-        solution = Solution.new source_file: filename, language: params[:language]
+        solution = Solution.new source: filename, lang: params[:language]
 
         if user.submissions.new(solution: solution, task: task).save
+          grade
           message "Submission successful."
         else
           message "Submission unseccessful."
