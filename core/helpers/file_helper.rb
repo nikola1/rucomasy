@@ -22,7 +22,7 @@ module Rucomasy
     SUBMISSIONS = File.join PROJECT_DIR, 'files/submissions'
     TESTCASES   = File.join PROJECT_DIR, 'files/testcases'
 
-    def self.create_random_file(dir = TMP_DIRECTORY)
+    def self.create_random_file(dir = TMP_DIR)
       file_location = File.join dir, random_filename
       FileUtils.touch file_location
       File.absolute_path file_location
@@ -37,7 +37,7 @@ module Rucomasy
     end
 
     def self.create_runner_file
-      create_random_file RUNNERS_DIRECTORY
+      create_random_file TMP_RUNNERS
     end
 
     def self.rand_file_with_ext(filename)

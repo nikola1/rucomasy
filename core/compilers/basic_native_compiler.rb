@@ -30,7 +30,7 @@ module Rucomasy
     end
 
     def create_directory
-      directory = File.join TMP_DIR, FileHelper.random_dirname
+      directory = File.join TMP_DIR_LOCATION, FileHelper.random_dirname
       if File.exists? directory
         raise CompilationError, "Destination directory already exists."
       else
