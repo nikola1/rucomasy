@@ -1,0 +1,15 @@
+#!/usr/bin/env watchr
+require '../core/rucomasy'
+require './contest_grader'
+require 'watchr'
+require 'fileutils'
+
+Dir.chdir File.dirname(__FILE__) do
+  FileUtils.touch 'grade'
+
+  watch 'grade' do
+    puts "#{Time.now}: Initiate grading..."
+    ContestGrader.new.grade_not_tested
+    puts "#{Time.now}: No more tasks to grade."
+  end
+end
