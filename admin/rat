@@ -8,6 +8,12 @@ require './task_persistance_manager'
 require './contest_persistance_manager'
 require './testcase_persistance_manager'
 
+module Rucomasy
+  module Rat
+    CHARS_PER_LINE = 80
+  end
+end
+
 def wait_for(commands)
   Trollop::options do
     stop_on commands
@@ -18,21 +24,18 @@ end
 def parse(date)
   DateTime.parse date unless date.nil?
 end
-
 action = wait_for %w(add edit delete list)
-
-CHARS_PER_LINE = 80
 
 if action == 'list'
   domain = wait_for %w(contests tasks testcases)
 
-  puts "=" * CHARS_PER_LINE
+  puts "=" * Rucomasy::Rat::CHARS_PER_LINE
   if domain == 'contests'
-    ContestPersistanceManager.instance.select(order: [:start_date.desc]).each &:print
+    Rucomasy::Rat::ContestPersistanceManager.instance.select(order: [:start_date.desc]).each &:print
   elsif domain == 'tasks'
-    TaskPersistanceManager.instance.select(order: [:id.desc]).each &:print
+    Rucomasy::Rat::TaskPersistanceManager.instance.select(order: [:id.desc]).each &:print
   elsif domain == 'testcases'
-    TestcasePersistanceManager.instance.select(order: [:id.desc]).each &:print
+    Rucomasy::Rat::    TestcasePersistanceManager.instance.select(order: [:id.desc]).each &:print
   else
     Trollop::die 'What?!'
   end
@@ -125,22 +128,22 @@ else
   if domain == 'contest'
 
     case action
-    when 'add'    then ContestPersistanceManager.instance.add cmd_opts
-    when 'delete' then ContestPersistanceManager.instance.delete_matching all, cmd_opts
-    when 'edit'   then ContestPersistanceManager.instance.edit cmd_opts
+    when 'add'    then Rucomasy::Rat::ContestPersistanceManager.instance.add cmd_opts
+    when 'delete' then Rucomasy::Rat::ContestPersistanceManager.instance.delete_matching all, cmd_opts
+    when 'edit'   then Rucomasy::Rat::ContestPersistanceManager.instance.edit cmd_opts
     end
   elsif domain == 'task'
     cmd_opts[:contest] = Contest.get cmd_opts[:contest] if cmd_opts[:contest]
 
     case action
-    when 'add'    then TaskPersistanceManager.instance.add cmd_opts
-    when 'delete' then TaskPersistanceManager.instance.delete_matching all, cmd_opts
-    when 'edit'   then TaskPersistanceManager.instance.edit cmd_opts
+    when 'add'    then Rucomasy::Rat::TaskPersistanceManager.instance.add cmd_opts
+    when 'delete' then Rucomasy::Rat::TaskPersistanceManager.instance.delete_matching all, cmd_opts
+    when 'edit'   then Rucomasy::Rat::TaskPersistanceManager.instance.edit cmd_opts
     end
   elsif domain == 'testcases'
     case action
-    when 'add'    then TestcasePersistanceManager.instance.add_from_folder cmd_opts
-    when 'delete' then TestcasePersistanceManager.instance.delete_matching true, cmd_opts
+    when 'add'    then Rucomasy::Rat::TestcasePersistanceManager.instance.add_from_folder cmd_opts
+    when 'delete' then Rucomasy::Rat::TestcasePersistanceManager.instance.delete_matching true, cmd_opts
     when 'edit'   then Trollop::die "Edit for testcases is not yet supported."
     end
   else
