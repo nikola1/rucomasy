@@ -4,13 +4,11 @@ module Rucomasy
   class Runner
     attr_accessor :options
 
-    OPTIONS_ALIASES = { memory: :rlimit_as,
-                          time: :rlimit_cpu,
-                         stack: :rlimit_stack,
-                         stdin: :in,
-                        stdout: :out,
-                        stderr: :err,
-                           pwd: :chdir }
+    ALLOWED_OPTIONS = [:memory, :time, :stack, :stdin, :stdout, :stderr, :pwd,
+      :no_input, :no_output, :no_error]
+
+    OPTIONS_ALIASES = { memory: :rlimit_as, time: :rlimit_cpu,
+      stack: :rlimit_stack, stdin: :in, stdout: :out, stderr: :err, pwd: :chdir }
 
     def initialize(runnable, options = {})
       @runnable, @options = runnable, options
@@ -39,9 +37,16 @@ module Rucomasy
     end
 
     def parse_options(options)
-      options.each_with_object({}) do |(option, value), result|
-        result[OPTIONS_ALIASES[option]] = value unless OPTIONS_ALIASES[option].nil?
+      filtered_options = options.reject do |option, value|
+        not ALLOWED_OPTIONS.member?(option)
       end
+
+      options.each do |option, value|
+        unless OPTIONS_ALIASES[option].nil?
+          filtered_options[OPTIONS_ALIASES[option]] = filtered_options.delete option
+        end
+      end
+      filtered_options
     end
 
     class Status
@@ -91,18 +96,18 @@ module Rucomasy
         opts = {}
       end
 
-      input_file   = opts.delete(:in)
-      output_file  = opts.delete(:out)
-      error_file   = opts.delete(:err)
+      opts[:in]  = FileHelper.create_runner_file unless opts[:in]
+      opts[:out] = FileHelper.create_runner_file unless opts[:out]
+      opts[:err] = FileHelper.create_runner_file unless opts[:err]
+      opts[:in] = [opts[:in]]
 
       opts[:chdir] ||= pwd
-      opts[:stdin_data] = File.read input_file unless input_file.nil?
+      Process.spawn *cmd, opts
 
-      output, error, status = Open3.capture3(*cmd, opts)
+      pid, status = Process.wait2
 
-      File.write output_file, output unless output_file.nil?
-      File.write error_file, error unless error_file.nil?
-
+      output = File.read opts[:out]
+      error = File.read opts[:err]
       [output, error, status]
     end
   end

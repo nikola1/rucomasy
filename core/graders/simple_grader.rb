@@ -20,34 +20,34 @@ module Rucomasy
 
     def grade_solution(task, solution)
       [].tap do |result|
-        grade_test_cases(task, solution) do |test_case, test_result|
-          result << [test_case, test_result]
+        grade_testcases(task, solution) do |testcase, test_result|
+          result << [testcase, test_result]
         end
       end
     end
 
-    def grade_test_cases(task, solution)
+    def grade_testcases(task, solution)
       compilation_status, runnable = CompileHelper.compile solution.source, solution.lang
 
       if compilation_status.success
         solution_runner = task.runner.new runnable, task.limits
 
-        task.test_cases.each do |test_case|
-          result = grade_test_case test_case, solution_runner, task.checker, task.rule
-          yield test_case, result
-        end
+        task.testcases.each do |testcase|
+          result = grade_testcase testcase, solution_runner, task.checker, task.rule
+          yield testcase, result
+        end if task.testcases
       else
-        task.test_cases.each do |test_case|
-          yield test_case, Result.new(:ce, compilation_status.error)
-        end
+        task.testcases.each do |testcase|
+          yield testcase, Result.new(:ce, compilation_status.error)
+        end if task.testcases
       end
     end
 
-    def grade_test_case(test_case, runner, checker, rule)
-      run_status = runner.run stdin: test_case.input
+    def grade_testcase(testcase, runner, checker, rule)
+      run_status = runner.run stdin: testcase.input
 
       if run_status.exitcode == 0
-        checker_status = checker.check run_status.output, test_case
+        checker_status = checker.check run_status.output, testcase
         Result.new run_status.reason,
                    checker_status.message,
                    rule.evaluate(yours: checker_status.points),
