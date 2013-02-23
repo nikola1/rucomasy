@@ -1,7 +1,7 @@
 module FileUploadSHelper
   def file_upload(file)
     if file
-      rand_file_name = Rucomasy::FileHelper(rand_file_with_ext(file[:filename]))
+      rand_file_name = Rucomasy::FileHelper.rand_file_with_ext(file[:filename])
       file_location = File.join settings.submissions, rand_file_name
       tmpfile = file[:tempfile]
 
