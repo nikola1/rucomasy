@@ -1,4 +1,4 @@
-class Testcase < Rucomasy::SimpleIOTestcase
+class Testcase
   include DataMapper::Resource
 
   property :id,     Serial,  serial: true

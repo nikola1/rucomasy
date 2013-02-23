@@ -14,7 +14,7 @@ class Contest
   end
 
   def has_ended?
-    DateTime.now >= start_date
+    DateTime.now >= end_date
   end
 
   def in_progress?
