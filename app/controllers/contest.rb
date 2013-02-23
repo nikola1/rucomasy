@@ -3,6 +3,10 @@ class RucomasyWebApp < Sinatra::Base
     redirect to '/contests'
   end
 
+  not_found do
+    message "404 Page not found."
+  end
+
   get '/contests' do
     @contests = Contest.all
     erb :contests
